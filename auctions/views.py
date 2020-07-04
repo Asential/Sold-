@@ -86,3 +86,11 @@ def listing(request, id):
 def create(request):
 
     return render(request, "auctions/create.html")
+
+@login_required
+def save(request):
+
+    form = request.POST
+    Listing.objects.create(item = form["title"], description = form["description"], category = form["category"])
+
+    return HttpResponseRedirect(reverse("index"))
