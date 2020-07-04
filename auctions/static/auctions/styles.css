@@ -8,3 +8,8 @@ body {
 #createTtl{
     width: 25%;
 }
+
+#link{
+    display: block;
+    margin: 10px 15px;
+}

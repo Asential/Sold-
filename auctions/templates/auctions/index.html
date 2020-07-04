@@ -4,7 +4,7 @@
     <h2>Active Listings</h2>
     {% for i in items %}
 
-        <a href="{% url 'listing' i.id %}"> {{i.item}}  </a>
+        <a id="link" href="{% url 'listing' i.id %}"> {{i.item}}  </a>
     
     {% endfor %}
 {% endblock %}
