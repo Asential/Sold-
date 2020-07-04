@@ -37,10 +37,13 @@ class Listing(models.Model):
         (ELECTRONICS, "Electronics"),
         (HOME, "Home")
     ]
+    user = models.CharField(max_length=64)
     item = models.CharField(max_length=64)
+    bid = models.IntegerField()
     description = models.TextField(max_length=600)
     category = models.CharField(choices=CATEGORIES, default=NONE, max_length=20)
-    bid = models.IntegerField()
     
+
     def __str__(self):
         return f"{self.item} : {self.category}"
+     

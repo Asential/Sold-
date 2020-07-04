@@ -4,8 +4,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
+from django.forms import ModelForm
 from .models import User, Listing, Bid, Comment
+
+
+class ListingForm(ModelForm):  
+    class Meta:  
+        model = Listing  
+        fields = "__all__"  
 
 #----------------------------------------------------------------
 
@@ -84,13 +90,24 @@ def listing(request, id):
 
 @login_required
 def create(request):
-
-    return render(request, "auctions/create.html")
+    form = ListingForm()
+    return render(request, "auctions/create.html", {
+        "form": form
+    })
 
 @login_required
 def save(request):
-
-    form = request.POST
-    Listing.objects.create(item = form["title"], description = form["description"], category = form["category"])
-
-    return HttpResponseRedirect(reverse("index"))
+    if request.method == "POST":
+        form = ListingForm(request.POST)
+        if form:
+            Listing.objects.create(
+                item = form.data.get('item'), 
+                description = form.data.get('description'), 
+                category =  form.data.get('category'), 
+                bid =  form.data.get('bid'),
+                user = request.user.username
+            )
+            return HttpResponseRedirect(reverse("index")) 
+        else:
+            print("Error")
+            return HttpResponseRedirect(reverse("index"))

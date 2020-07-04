@@ -3,12 +3,33 @@
 {% block body %}
     <h1>Create a listing</h1>
     <form action="{% url 'save' %}" method="POST">
-        <div class="form-group">
+        {% csrf_token %}
+        
+        <div>
+            <label for="{{ form.item.id_for_label }}">Title</label>
+            {{form.item}}
+        </div>
+        <div>
+            <label for="{{ form.bid.id_for_label }}">Starting Bid</label>
+            {{form.bid}}
+        </div>
+        <div>
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{form.description}}
+        </div>
+        <div>
+            <label for="{{ form.category.id_for_label }}">Category</label>
+            {{form.category}}
+        </div>
+        <!-- <div class="form-group">
             {% csrf_token %}
-            <input id="createTtl" name="title" class="form-control" type="text" placeholder="Title">
+            <input id="createTtl" name="title" class="form-control" type="text" required minlength="1" placeholder="Title">
         </div>
         <div class="form-group">
-            <textarea id="createDsc" name="description" class="form-control" placeholder="Enter the description of the item"></textarea>
+            <input id="createTtl" name="bid" class="form-control" minlength="1" required type="number" step="1" placeholder="Starting Bid">
+        </div>
+        <div class="form-group">
+            <textarea id="createDsc" name="description" class="form-control" minlength="50" required placeholder="Enter the description of the item"></textarea>
         </div>
         <div class="form-group">
             <label for="createCat">Category</label>
@@ -19,7 +40,7 @@
                 <option>Electronics</option>
                 <option>Home</option>
             </select>
-          </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+          </div> -->
+        <input type="submit" class="btn btn-primary" value="Submit">
     </form>
 {% endblock %}
