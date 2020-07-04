@@ -1,3 +1,10 @@
 body {
-    padding: 10px;
+    padding: 50px;
+}
+#createDsc{
+    height: 400px;
+}
+
+#createTtl{
+    width: 25%;
 }

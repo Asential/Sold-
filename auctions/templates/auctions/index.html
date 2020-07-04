@@ -2,6 +2,9 @@
 
 {% block body %}
     <h2>Active Listings</h2>
+    {% for i in items %}
 
-    TODO
+        <a href="{% url 'listing' i.id %}"> {{i.item}}  </a>
+    
+    {% endfor %}
 {% endblock %}
