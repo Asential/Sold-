@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm
-from .models import User, Listing, Bid, Comment
+from .models import User, Listing, Bid, Comment, WishList
 
 
 class ListingForm(ModelForm):  
@@ -68,6 +68,8 @@ def register(request):
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
+            wishlist = WishList.objects.create(name = user)
+            wishlist.save()
         except IntegrityError:
             return render(request, "auctions/register.html", {
                 "message": "Username already taken."
@@ -81,9 +83,20 @@ def register(request):
 
 def listing(request, id):
     
+    wishlist = WishList.objects.get(name=request.user)
     item = Listing.objects.get(id=id)
+
+    for i in wishlist.item.all():
+        if i == item:
+            print("REFRESHED")
+            return render(request, "auctions/listing.html", {
+                "item": item,
+                "wishlisted": True
+            })
+
     return render(request, "auctions/listing.html", {
-        "item": item
+        "item": item,
+        "wishlisted": False
     })
 
 #----------------------------------------------------------------
@@ -104,10 +117,84 @@ def save(request):
                 item = form.data.get('item'), 
                 description = form.data.get('description'), 
                 category =  form.data.get('category'), 
-                bid =  form.data.get('bid'),
-                user = request.user.username
+                startbid =  form.data.get('startbid'),
+                user = request.user
             )
             return HttpResponseRedirect(reverse("index")) 
         else:
             print("Error")
             return HttpResponseRedirect(reverse("index"))
+
+@login_required
+def wishlist(request, id):
+    if request.method == "POST":
+        item = Listing.objects.get(id=id)
+        wishlist = WishList.objects.get(name=request.user)
+        
+        for i in wishlist.item.all():
+            if i == item:
+                print("ALREADY THERE")
+                return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+        wishlist.item.add(item)
+        print("ADDED")
+        return HttpResponseRedirect(reverse("listing",args=(id,)))
+            
+        
+    else:
+        print("Error")
+        return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+@login_required
+def unwishlist(request, id):
+    if request.method == "POST":
+        print("Unwishlisting")
+        item = Listing.objects.get(id=id)
+        wishlist = WishList.objects.get(name=request.user)
+        
+        for i in wishlist.item.all():
+            if i == item:
+                wishlist.item.remove(item)
+                return HttpResponseRedirect(reverse("listing",args=(id,)))
+        
+    else:
+        print("Error")
+        return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+@login_required
+def watchlist(request):
+
+    wishlist = WishList.objects.get(name=request.user)
+    watchlist_items = wishlist.item.all()
+    return render(request, "auctions/watchlist.html", {
+        "items": watchlist_items
+    })
+
+@login_required
+def placebid(request, id):
+    form = request.POST
+    bid = int(form["bid"])
+    item = Listing.objects.get(id=id)
+    if bid >= item.startbid:
+        currentbid = bid
+        if Bid.objects.filter(item=item):
+            totalbids = Bid.objects.filter(item=item)
+            for bid in totalbids:
+                if currentbid <= bid.amount:
+                    print("TOO SMALL")
+                    return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+            print("New Bid Placed")
+            newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
+            return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+        else:
+            print("First Bid Placed")
+            newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
+            return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+        print("Bid smaller than other bids")
+        return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+    print("Bid smaller than starting bid")
+    return HttpResponseRedirect(reverse("listing",args=(id,)))

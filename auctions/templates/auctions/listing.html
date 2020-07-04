@@ -5,5 +5,29 @@
     <div>
         <h4>{{item.description}}</h4>
         <div>{{item.category}}</div>
+        <div>{{item.startbid}}</div>
     </div>
+    {% if request.user == item.user %}
+        <button>Close Entry</button>
+    {% endif %}
+    {% if request.user != item.user%}
+    <form action="{% url 'placebid' item.id %}" method="POST">
+        {% csrf_token %}
+        <input  name="bid" type="number" step="1">
+        <button type="submit"> Place Bid</button>
+    </form>
+    {% endif %}
+    
+    {% if wishlisted %}
+    <form action="{% url 'unwishlist' item.id %}" method="POST">
+        {% csrf_token %}
+        <button>Watching</button>
+    </form>
+    {% else %}
+    <form action="{% url 'wishlist' item.id %}" method="POST">
+        {% csrf_token %}
+        <button>Not Watching</button>
+    </form>
+    {% endif %}
+    
 {% endblock %}
