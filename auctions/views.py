@@ -88,7 +88,6 @@ def listing(request, id):
 
     for i in wishlist.item.all():
         if i == item:
-            print("REFRESHED")
             return render(request, "auctions/listing.html", {
                 "item": item,
                 "wishlisted": True
@@ -181,20 +180,20 @@ def placebid(request, id):
             totalbids = Bid.objects.filter(item=item)
             for bid in totalbids:
                 if currentbid <= bid.amount:
-                    print("TOO SMALL")
+                    print("Bid Smaller than other bids!")
                     return HttpResponseRedirect(reverse("listing",args=(id,)))
 
-            print("New Bid Placed")
+            print("New Bid Placed!")
             newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
             return HttpResponseRedirect(reverse("listing",args=(id,)))
 
         else:
-            print("First Bid Placed")
+            print("First Bid Placed!")
             newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
             return HttpResponseRedirect(reverse("listing",args=(id,)))
 
-        print("Bid smaller than other bids")
+        print("Bid smaller than other bids!")
         return HttpResponseRedirect(reverse("listing",args=(id,)))
 
-    print("Bid smaller than starting bid")
+    print("Bid smaller than starting bid!")
     return HttpResponseRedirect(reverse("listing",args=(id,)))
