@@ -13,3 +13,7 @@ body {
     display: block;
     margin: 10px 15px;
 }
+
+.item, #catg, #image, #desc, #bid{
+    padding: 20px;
+}

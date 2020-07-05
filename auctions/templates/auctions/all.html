@@ -1,9 +1,8 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>All Listings</h2>
     {% for i in items %}
-    {% if i.status == True %}
         <div class="col-12">
         <a id="link" href="{% url 'listing' i.id %}">
             <h3>
@@ -19,7 +18,7 @@
                Current Bid: {{i.startbid}}
             </div>
         </a>
-        </div>
-    {% endif %}
+    </div>
     {% endfor %}
+    
 {% endblock %}

@@ -23,6 +23,17 @@ def index(request):
         "items": listing_items
     })
 
+
+#----------------------------------------------------------------
+
+def all(request):
+
+    listing_items = Listing.objects.all()
+
+    return render(request, "auctions/all.html", {
+        "items": listing_items
+    })
+
 #----------------------------------------------------------------
 
 def login_view(request):
@@ -83,20 +94,28 @@ def register(request):
 
 def listing(request, id):
     
-    wishlist = WishList.objects.get(name=request.user)
     item = Listing.objects.get(id=id)
 
-    for i in wishlist.item.all():
-        if i == item:
-            return render(request, "auctions/listing.html", {
-                "item": item,
-                "wishlisted": True
-            })
+    if request.user.is_authenticated:
+        bids = Bid.objects.all().filter(item=item)
+        wishlist = WishList.objects.get(name=request.user)      
+        for i in wishlist.item.all():
+            if i == item:
+                return render(request, "auctions/listing.html", {
+                    "item": item,
+                    "wishlisted": True,
+                    "bids": bids
+                })
 
-    return render(request, "auctions/listing.html", {
-        "item": item,
-        "wishlisted": False
-    })
+        return render(request, "auctions/listing.html", {
+            "item": item,
+            "wishlisted": False,
+            "bids": bids
+        })
+    else:
+        return render(request, "auctions/listing.html", {
+            "item": item,
+        })
 
 #----------------------------------------------------------------
 
@@ -117,7 +136,8 @@ def save(request):
                 description = form.data.get('description'), 
                 category =  form.data.get('category'), 
                 startbid =  form.data.get('startbid'),
-                user = request.user
+                user = request.user,
+                image_url = form.data.get('image_url'),
             )
             return HttpResponseRedirect(reverse("index")) 
         else:
@@ -198,3 +218,14 @@ def placebid(request, id):
 
     print("Bid smaller than starting bid!")
     return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+@login_required
+def close(request, id):
+    if request.method == "POST":
+        item = Listing.objects.get(id=id)
+        item.status = False
+        item.save()
+        return HttpResponseRedirect(reverse("listing",args=(id,)))
+    else:
+        print("Error")
+        return HttpResponseRedirect(reverse("listing",args=(id,)))
