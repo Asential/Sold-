@@ -3,25 +3,27 @@
 {% block body %}
 {% if item.status == True %}
     <div class="item">
-        <h1 class="item">{{item.item}}</h1>
-        <h4 id="desc">Description - {{item.description}}</h4>
+        <h1 id="item">{{item.item}}</h1>
+        <h5 id="desc">Description - {{item.description}}</h4>
         {% if item.image_url %}
-            <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+        <img id="image" style="float:right; width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
         {% endif %}
-
+        
         {% if item.category != 'None' %}
             <div id="catg">Category - {{item.category}}</div>
         {% endif %}
-        
+        <div>
         {% if bids %}
             {% for b in bids %}
                 {% if b.amount == item.startbid %}
                     <div id="bid">Highest bid: {{item.startbid}}</div>
                 {% endif %}
             {% endfor %}
+        
         {% else %}
             <div id="bid">Starting Bid: {{item.startbid}}</div>
         {% endif %}
+        </div>
     </div>
     {% if user.is_authenticated %}
         {% if messages %}
@@ -34,14 +36,14 @@
 
         <div class="item">
             {% if request.user == item.user %}
-                <form class="item" action="{% url 'close' item.id %}" method="POST">
+                <form  action="{% url 'close' item.id %}" method="POST">
                     {% csrf_token %}
                     <button>Close Entry</button>
                 </form>
             {% endif %}
 
             {% if request.user != item.user%}
-                <form class="item" action="{% url 'placebid' item.id %}" method="POST">
+                <form  action="{% url 'placebid' item.id %}" method="POST">
                     {% csrf_token %}
                     <input  name="bid" type="number" step="1">
                     <button type="submit"> Place Bid</button>
@@ -49,52 +51,40 @@
             
     
                 {% if wishlisted %}
-                    <form class="item" action="{% url 'unwishlist' item.id %}" method="POST">
+                    <form action="{% url 'unwishlist' item.id %}" method="POST">
                         {% csrf_token %}
                         <button>Watching</button>
                     </form>
                 {% else %}
-                    <form class="item" action="{% url 'wishlist' item.id %}" method="POST">
-                        {% csrf_token %}
-                        <button>Not Watching</button>
+                    <form action="{% url 'wishlist' item.id %}" method="POST">
+                        <div class="form-group">
+                            {% csrf_token %}
+                            <button>Not Watching</button>
+                        </div>
                     </form>
                 {% endif %}
             {% endif %}
         </div>
-
-    {% else %}
-        
-        <div class="item">
-        <h1 class="item">{{item.item}}</h1>
-        <h4 id="desc">Description - {{item.description}}</h4>
-        {% if item.image_url %}
-            <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
-        {% endif %}
-
-        {% if item.category != 'None' %}
-            <div id="catg">Category - {{item.category}}</div>
-        {% endif %}
-        
-        {% if bids %}
-            {% for b in bids %}
-                {% if b.amount == item.startbid %}
-                    <div id="bid">Highest bid: {{item.startbid}}</div>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <div id="bid">Starting Bid: {{item.startbid}}</div>
-        {% endif %}
-    </div>
-    
+        <div class="comments">
+            <form action="{% url 'comment' item.id %}" method="POST">
+                {% csrf_token %}
+                <div class="field form-group col-12" style="padding: 0;">
+                    <label for="{{ form.description.id_for_label }}">Write a comment</label>
+                    <textarea class="form-control" name="comment" cols="40" rows="10" maxlength="200" required="" id="id_comment"></textarea>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Post" >
+            </form>
+        </div>
     {% endif %}
+    
 
 {% else %}
     
     <div class="item">
-        <h1 class="item">{{item.item}}</h1>
+        <h1 id="item">{{item.item}}</h1>
         <h4 id="desc">{{item.description}}</h4>
         {% if item.image_url %}
-            <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+            <img id="image" style="width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
         {% endif %} 
         {% if item.category != 'None' %}
             <div id="catg"> Category - {{item.category}}</div>
@@ -111,16 +101,7 @@
     </div>
 
 {% endif %}
-    <form action="{% url 'comment' item.id %}" method="POST">
-        {% csrf_token %}
-        <div>
-            <label for="{{ form.description.id_for_label }}">Write a comment</label>
-            {{form.comment}}
-        </div>
-        <input type="submit" value="Post" >
-    </form>
-
-    <h6>Comments</h6>
+    <h6 class="sub-head">Comments</h6>
     {% for c in comments%}
         <div> {{c.name}} said: {{c.comment}} </div>
     {% endfor %}

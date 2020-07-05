@@ -18,8 +18,12 @@ body {
     padding: 20px;
 }
 
-.item, #catg, #image, #desc, #bid{
-    padding: 20px;
+#bid{
+    margin-top: 20px;
+}
+
+.comments, .item{
+    padding: 0px 15px;
 }
 
 #item-details{

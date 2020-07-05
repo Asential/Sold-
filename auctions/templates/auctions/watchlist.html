@@ -3,22 +3,36 @@
 {% block body %}
     <h2 class="sub-head">Watchlist</h2>
     {% for i in items %}
-        <div class="col-12">
-        <a id="link" href="{% url 'listing' i.id %}">
-            <h3>
-                {{i.item}}
-            </h3>
-            <div>
-                Description: {{i.description}}
-            </div>
-            {% if i.image_url %}
-            <img style="width: 400px;" src="{{i.image_url}}" alt="Item Image Here">
-            {% endif %}   
-            <div>
-               Current Bid: {{i.startbid}}
-            </div>
-        </a>
+    <div class="container row">
+        <div class="background-img">
+          <div class="box">
+            <div class="col-12 listing content">
+              <a id="link" href="{% url 'listing' i.id %}">
+                  <div id="item-details" class="row">
+                  <div class="col-4">
+                      {% if i.image_url %}
+                      <img style="width: 400px; height: 250px;" src="{{i.image_url}}" alt="Item Image Here">
+                      {% endif %}
+                  </div>
+                  <br>
+                  <div class="col-8">
+                      <h3>
+                          {{i.item}}
+                      </h3>
+                      <div>
+                          {{i.description}}
+                      </div>
+                      <br>
+                      <div>
+                         Current Bid: <p style="font-weight: bold;">₹{{i.startbid}}</p>
+                      </div>
+                      </div>
+                  </div>
+              </a>
+              </div>
+          </div>
         </div>
+      </div>
     {% endfor %}
     
 {% endblock %}
