@@ -4,30 +4,39 @@
     <h2 class="sub-head">Active Listings</h2>
     {% for i in items %}
     {% if i.status == True %}
-        <div class="col-12 listing">
-        <a id="link" href="{% url 'listing' i.id %}">
-            <div class="row">
-            <div class="col-4">
-                {% if i.image_url %}
-                    <img style="width: 400px;" src="{{i.image_url}}" alt="Item Image Here">
-                {% endif %}
-            </div>
-            <div class="col-8">
-                <h3>
-                    {{i.item}}
-                </h3>
-                <div>
-                    {{i.description}}
-                </div>
-       
-                <div>
-                   Current Bid: {{i.startbid}}
-                </div>
-                </div>
-            </div>
-        </a>
+    <div class="container row">
+        <div class="background-img">
+          <div class="box">
+            <div class="col-12 listing content">
+              <a id="link" href="{% url 'listing' i.id %}">
+                  <div id="item-details" class="row">
+                  <div class="col-4">
+                      {% if i.image_url %}
+                      <img style="width: 400px; height: 250px;" src="{{i.image_url}}" alt="Item Image Here">
+                      {% endif %}
+                  </div>
+                  <br>
+                  <div class="col-8">
+                      <h3>
+                          {{i.item}}
+                      </h3>
+                      <div>
+                          {{i.description}}
+                      </div>
+                      <br>
+                      <div>
+                         Current Bid: <p style="font-weight: bold;">₹{{i.startbid}}</p>
+                      </div>
+                      </div>
+                  </div>
+              </a>
+              </div>
+          </div>
         </div>
+      </div>
     {% endif %}
     {% endfor %}
+
+
 {% endblock %}
 

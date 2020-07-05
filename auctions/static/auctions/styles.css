@@ -22,8 +22,8 @@ body {
     padding: 20px;
 }
 
-.listing{
-    margin: 50px 0;
+#item-details{
+    color: black;
 }
 
 #navbar{

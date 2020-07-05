@@ -44,7 +44,7 @@ def all(request):
 def userlist(request):
 
     listing_items = Listing.objects.all().filter(user=request.user)
-    return render(request, "auctions/all.html", {
+    return render(request, "auctions/userlist.html", {
         "items": listing_items
     })
 
