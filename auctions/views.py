@@ -11,6 +11,11 @@ from django.contrib import messages
 class ListingForm(ModelForm):  
     class Meta:  
         model = Listing  
+        fields = "__all__"
+
+class CommentForm(ModelForm):  
+    class Meta:  
+        model = Comment  
         fields = "__all__"  
 
 #----------------------------------------------------------------
@@ -128,26 +133,35 @@ def register(request):
 def listing(request, id):
     
     item = Listing.objects.get(id=id)
-
+    comments = Comment.objects.all().filter(item=item)
+    bids = Bid.objects.all().filter(item=item)
+    form = CommentForm()
     if request.user.is_authenticated:
-        bids = Bid.objects.all().filter(item=item)
+        # bids = Bid.objects.all().filter(item=item)
+        # comments = Comment.objects.all().filter(item=item)
         wishlist = WishList.objects.get(name=request.user)      
         for i in wishlist.item.all():
             if i == item:
                 return render(request, "auctions/listing.html", {
                     "item": item,
                     "wishlisted": True,
-                    "bids": bids
+                    "bids": bids,
+                    "comments":comments,
+                    "form": form
                 })
 
         return render(request, "auctions/listing.html", {
             "item": item,
             "wishlisted": False,
-            "bids": bids
+            "bids": bids,
+            "comments":comments,
+            "form": form
         })
     else:
         return render(request, "auctions/listing.html", {
             "item": item,
+            "bids": bids,
+            "comments":comments
         })
 
 #----------------------------------------------------------------
@@ -264,3 +278,24 @@ def close(request, id):
     else:
         print("Error")
         return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+@login_required
+def comment(request, id):
+
+    if request.method == "POST":    
+        listing = Listing.objects.get(id=id)
+        form = CommentForm(request.POST)
+        if form:
+            Comment.objects.create(
+                item = listing,
+                comment = form.data.get('comment'), 
+                name = request.user,
+            )
+            return HttpResponseRedirect(reverse("listing",args=(id,))) 
+        else:
+            print("Error")
+            return HttpResponseRedirect(reverse("listing",args=(id,)))
+    else:
+        print("Error")
+        return HttpResponseRedirect(reverse("listing",args=(id,)))
+

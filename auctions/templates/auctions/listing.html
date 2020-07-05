@@ -61,7 +61,9 @@
                 {% endif %}
             {% endif %}
         </div>
+
     {% else %}
+        
         <div class="item">
         <h1 class="item">{{item.item}}</h1>
         <h4 id="desc">Description - {{item.description}}</h4>
@@ -109,5 +111,17 @@
     </div>
 
 {% endif %}
+    <form action="{% url 'comment' item.id %}" method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.description.id_for_label }}">Write a comment</label>
+            {{form.comment}}
+        </div>
+        <input type="submit" value="Post" >
+    </form>
 
+    <h6>Comments</h6>
+    {% for c in comments%}
+        <div> {{c.name}} said: {{c.comment}} </div>
+    {% endfor %}
 {% endblock %}
