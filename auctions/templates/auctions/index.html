@@ -1,25 +1,33 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2 class="sub-head">Active Listings</h2>
     {% for i in items %}
     {% if i.status == True %}
-        <div class="col-12">
+        <div class="col-12 listing">
         <a id="link" href="{% url 'listing' i.id %}">
-            <h3>
-                {{i.item}}
-            </h3>
-            <div>
-                Description: {{i.description}}
+            <div class="row">
+            <div class="col-4">
+                {% if i.image_url %}
+                    <img style="width: 400px;" src="{{i.image_url}}" alt="Item Image Here">
+                {% endif %}
             </div>
-            {% if i.image_url %}
-            <img style="width: 400px;" src="{{i.image_url}}" alt="Item Image Here">
-            {% endif %}   
-            <div>
-               Current Bid: {{i.startbid}}
+            <div class="col-8">
+                <h3>
+                    {{i.item}}
+                </h3>
+                <div>
+                    {{i.description}}
+                </div>
+       
+                <div>
+                   Current Bid: {{i.startbid}}
+                </div>
+                </div>
             </div>
         </a>
         </div>
     {% endif %}
     {% endfor %}
 {% endblock %}
+

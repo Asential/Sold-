@@ -1,5 +1,8 @@
 body {
     padding: 50px;
+    background-color: #fdf200;
+    font-family: 'Montserrat', sans-serif;
+
 }
 #createDsc{
     height: 400px;
@@ -11,9 +14,62 @@ body {
 
 #link{
     display: block;
-    margin: 10px 15px;
+    text-decoration: none;
+    padding: 20px;
 }
 
 .item, #catg, #image, #desc, #bid{
     padding: 20px;
 }
+
+.listing{
+    margin: 50px 0;
+}
+
+#navbar{
+    text-decoration: none;
+    padding: 0px 15px;
+}
+
+#head{
+    padding: 0px 15px;
+    font-size: 4em;
+}
+
+.sub-head{
+    padding: 0px 15px;
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
+.linkA{
+    transition: ease 0.3s;
+    color: inherit;
+    width: 100%;
+    display: block;
+    padding: 0; 
+    margin: 10px 0px;
+    position: relative;
+}
+
+.linkA:after{
+    content: '';
+    position: absolute;
+    width: 0; height: 3px;
+    display: block;
+    margin-top: 5px;
+    right: 0;
+    background: #03dddc;
+    transition: width 0.3s ease;
+    -webkit-transition: width .3s ease;
+  }
+   
+  .linkA:hover:after{
+    color: #03dddc;
+    width: 100%;
+    left: 0;
+    background: #03dddc;
+  }
+  .linkA:hover{
+      color: #03dddc;
+  }
