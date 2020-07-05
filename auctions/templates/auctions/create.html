@@ -4,26 +4,40 @@
     <h2 class="sub-head">Create a listing</h2>
     <form action="{% url 'save' %}" method="POST">
         {% csrf_token %}
-        <div>
-            <label for="{{ form.item.id_for_label }}">Title</label>
-            {{form.item}}
+        <div class="col-12 form-group field">
+            <br>
+            <input placeholder="Title" class="form-control" style="width: 25%;" type="text" name="item" maxlength="64" required="" id="id_item">
         </div>
-        <div>
-            <label for="{{ form.bid.id_for_label }}">Starting Bid</label>
-            {{form.startbid}}
+        <div class="col-12 form-group field">
+            <br>
+            <input placeholder="Starting Bid" class="form-control" style="width: 10%;" type="number" name="startbid" required="" id="id_startbid">
         </div>
-        <div>
-            <label for="{{ form.description.id_for_label }}">Description</label>
-            {{form.description}}
+        <div class="col-12 form-group field">
+            <br>
+            <textarea placeholder="Describe your item here..." class="form-control" style="width: 50%;" name="description" cols="40" rows="10" maxlength="600" required="" id="id_description"></textarea>
         </div>
-        <div>
-            <label for="{{ form.description.id_for_label }}">Image URL:</label>
-            {{form.image_url}}
+        <div class="col-12 form-group field">
+            <br>
+            <input placeholder="Optionally Add an image URL" class="form-control" style="width: 25%;" type="text" name="image_url" maxlength="300" id="id_image_url">
         </div>
-        <div>
-            <label for="{{ form.category.id_for_label }}">Category</label>
-            {{form.category}}
+        <div class="col-12 form-group field">
+            <br>
+            <label for="{{ form.category.id_for_label }}">Category-</label> <select  class="form-control" style="width: 10%; display: inline;" name="category" id="id_category">
+                <option value="None" selected="">None</option>
+              
+                <option value="Fashion">Fashion</option>
+              
+                <option value="Toys">Toys</option>
+              
+                <option value="Electronics">Electronics</option>
+              
+                <option value="Home">Home</option>
+              
+              </select>
         </div>
-        <input type="submit" class="btn btn-primary" value="Submit">
-    </form>
+        <br>
+        <div class="col-12">
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </div>
+        </form>
 {% endblock %}

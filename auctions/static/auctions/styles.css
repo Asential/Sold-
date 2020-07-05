@@ -26,6 +26,55 @@ body {
     color: black;
 }
 
+.field > input, textarea{
+    background-color: #fdf200;
+    border: none;   
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+
+.field > input:focus{
+    background-color: #fdf200;
+    border: none;
+}
+
+.field > textarea{
+    background-color: #fdf200;
+    border: none;   
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+.field > textarea:focus{
+    background-color: #fdf200;
+    border: none;
+}
+
+.field > select{
+    background-color: #fdf200;
+    border: none;   
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+.field > select:focus{
+    background-color: #fdf200;
+    border: none;
+}
+
+.field > input::placeholder{
+    color: black;
+}
+.field > textarea::placeholder{
+    color: black;
+}
+.field > select::placeholder{
+    color: black;
+}
+
+
+
 #navbar{
     text-decoration: none;
     padding: 0px 15px;
