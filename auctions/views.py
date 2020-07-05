@@ -185,15 +185,16 @@ def placebid(request, id):
 
             print("New Bid Placed!")
             newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
+            item.startbid = currentbid
+            item.save()
             return HttpResponseRedirect(reverse("listing",args=(id,)))
 
         else:
             print("First Bid Placed!")
             newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
+            item.startbid = currentbid
+            item.save()
             return HttpResponseRedirect(reverse("listing",args=(id,)))
-
-        print("Bid smaller than other bids!")
-        return HttpResponseRedirect(reverse("listing",args=(id,)))
 
     print("Bid smaller than starting bid!")
     return HttpResponseRedirect(reverse("listing",args=(id,)))
