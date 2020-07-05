@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm
 from .models import User, Listing, Bid, Comment, WishList
-
+from django.contrib import messages
 
 class ListingForm(ModelForm):  
     class Meta:  
@@ -32,6 +32,39 @@ def all(request):
 
     return render(request, "auctions/all.html", {
         "items": listing_items
+    })
+
+#----------------------------------------------------------------
+
+def userlist(request):
+
+    listing_items = Listing.objects.all().filter(user=request.user)
+    return render(request, "auctions/all.html", {
+        "items": listing_items
+    })
+
+#----------------------------------------------------------------
+
+def closed(request):
+
+    listing_items = Listing.objects.all()
+    return render(request, "auctions/closed.html", {
+        "items": listing_items
+    })
+
+#----------------------------------------------------------------
+
+def categories(request):
+    
+    return render(request, "auctions/categories.html")
+
+#----------------------------------------------------------------
+
+def category(request, category):
+    items = Listing.objects.all()
+    return render(request, "auctions/category.html", {
+        "items": items,
+        "category": category
     })
 
 #----------------------------------------------------------------
@@ -201,6 +234,7 @@ def placebid(request, id):
             for bid in totalbids:
                 if currentbid <= bid.amount:
                     print("Bid Smaller than other bids!")
+                    messages.add_message(request, messages.ERROR, 'Bid Smaller than other bids!')
                     return HttpResponseRedirect(reverse("listing",args=(id,)))
 
             print("New Bid Placed!")
@@ -217,6 +251,7 @@ def placebid(request, id):
             return HttpResponseRedirect(reverse("listing",args=(id,)))
 
     print("Bid smaller than starting bid!")
+    messages.add_message(request, messages.ERROR, 'Bid smaller than required bid to replace!')
     return HttpResponseRedirect(reverse("listing",args=(id,)))
 
 @login_required

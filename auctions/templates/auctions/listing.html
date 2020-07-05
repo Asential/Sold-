@@ -4,72 +4,110 @@
 {% if item.status == True %}
     <div class="item">
         <h1 class="item">{{item.item}}</h1>
-        <h4 id="desc">{{item.description}}</h4>
+        <h4 id="desc">Description - {{item.description}}</h4>
         {% if item.image_url %}
-        <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
-        {% endif %} 
-        {% if item.category != 'None' %}
-        <div id="catg">{{item.category}}</div>
+            <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
         {% endif %}
-        <div id="bid">Current Bid: {{item.startbid}}</div>
+
+        {% if item.category != 'None' %}
+            <div id="catg">Category - {{item.category}}</div>
+        {% endif %}
+        
+        {% if bids %}
+            {% for b in bids %}
+                {% if b.amount == item.startbid %}
+                    <div id="bid">Highest bid: {{item.startbid}}</div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div id="bid">Starting Bid: {{item.startbid}}</div>
+        {% endif %}
     </div>
+    {% if user.is_authenticated %}
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <h5>{{ message }}</h5>
+            {% endfor %}
+            </ul>
+        {% endif %}
 
-{% if user.is_authenticated %}
-    <div class="item">
-    {% if request.user == item.user %}
-    <form class="item" action="{% url 'close' item.id %}" method="POST">
-        {% csrf_token %}
-        <button>Close Entry</button>
-    </form>
-    
-    {% endif %}
+        <div class="item">
+            {% if request.user == item.user %}
+                <form class="item" action="{% url 'close' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <button>Close Entry</button>
+                </form>
+            {% endif %}
 
-    {% if request.user != item.user%}
-    <form class="item" action="{% url 'placebid' item.id %}" method="POST">
-        {% csrf_token %}
-        <input  name="bid" type="number" step="1">
-        <button type="submit"> Place Bid</button>
-    </form>
-    {% endif %}
+            {% if request.user != item.user%}
+                <form class="item" action="{% url 'placebid' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <input  name="bid" type="number" step="1">
+                    <button type="submit"> Place Bid</button>
+                </form>
+            
     
-    {% if wishlisted %}
-    <form class="item" action="{% url 'unwishlist' item.id %}" method="POST">
-        {% csrf_token %}
-        <button>Watching</button>
-    </form>
-    
+                {% if wishlisted %}
+                    <form class="item" action="{% url 'unwishlist' item.id %}" method="POST">
+                        {% csrf_token %}
+                        <button>Watching</button>
+                    </form>
+                {% else %}
+                    <form class="item" action="{% url 'wishlist' item.id %}" method="POST">
+                        {% csrf_token %}
+                        <button>Not Watching</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
     {% else %}
-    <form class="item" action="{% url 'wishlist' item.id %}" method="POST">
-        {% csrf_token %}
-        <button>Not Watching</button>
-    </form>
+        <div class="item">
+        <h1 class="item">{{item.item}}</h1>
+        <h4 id="desc">Description - {{item.description}}</h4>
+        {% if item.image_url %}
+            <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+        {% endif %}
+
+        {% if item.category != 'None' %}
+            <div id="catg">Category - {{item.category}}</div>
+        {% endif %}
+        
+        {% if bids %}
+            {% for b in bids %}
+                {% if b.amount == item.startbid %}
+                    <div id="bid">Highest bid: {{item.startbid}}</div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div id="bid">Starting Bid: {{item.startbid}}</div>
+        {% endif %}
     </div>
+    
     {% endif %}
 
-{% endif %}
 {% else %}
     
     <div class="item">
         <h1 class="item">{{item.item}}</h1>
         <h4 id="desc">{{item.description}}</h4>
         {% if item.image_url %}
-        <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+            <img id="image" style="width: 400px;" src="{{item.image_url}}" alt="Item Image Here">
         {% endif %} 
         {% if item.category != 'None' %}
-        <div id="catg">{{item.category}}</div>
+            <div id="catg"> Category - {{item.category}}</div>
         {% endif %}
         {% if bids %}
-        {% for b in bids %}
-            {% if b.amount == item.startbid %}
-                <div id="bid">Closing Bid by {{b.placer}}: {{item.startbid}}</div>
-            {% endif %}
-        {% endfor %}
-        
+            {% for b in bids %}
+                {% if b.amount == item.startbid %}
+                    <div id="bid">Closing Bid by {{b.placer}}: {{item.startbid}}</div>
+                {% endif %}
+            {% endfor %}
         {% else %}
-        <div id="bid">Not Sold. Original Bid: {{item.startbid}}</div>
+            <div id="bid">Not Sold. Original Bid: {{item.startbid}}</div>
         {% endif %}
     </div>
 
-
 {% endif %}
+
 {% endblock %}
