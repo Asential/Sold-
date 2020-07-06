@@ -16,16 +16,23 @@
                   </div>
                   <br>
                   <div class="col-8">
-                      <h3>
-                          {{i.item}}
-                      </h3>
-                      <div>
-                          {{i.description}}
-                      </div>
-                      <br>
-                      <div>
-                         Current Bid: <p style="font-weight: bold;">₹{{i.startbid}}</p>
-                      </div>
+                        <h3>
+                            {{i.item}}
+                        </h3>
+                        <div>
+                            {{i.description}}
+                        </div>
+                        <br>
+                        {% if i.status == True %}
+                        <div>
+                        Current Bid: <p style="font-weight: bold;">₹{{i.startbid}}</p>
+                        </div>
+                        {% else %}
+                        <div>
+                            End Bid: <p style="font-weight: bold;">₹{{i.startbid}}</p>
+                        </div>
+                     
+                      {% endif %}
                       </div>
                   </div>
               </a>

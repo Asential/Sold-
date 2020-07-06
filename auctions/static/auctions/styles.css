@@ -18,9 +18,68 @@ body {
     padding: 20px;
 }
 
-#bid{
-    margin-top: 20px;
+.btn-primary{
+    color: black;
+    background-color: #fdf200;
+    border-color: #03dddc;
+    transition: ease 0.5s;
 }
+
+.watching{
+    background-color: #03dddc;
+    color: black;
+    border-color: #03dddc ;
+
+}
+
+.btn-primary:hover{
+    color: black;
+    transition: ease 0.5s;
+    background-color: #03dddc;
+}
+
+}
+
+.commentfield{
+    
+}
+
+#catg{
+    font-style: italic;
+}
+
+#bid{
+    font-size: 2em;
+}
+
+f{
+    font-weight: bold;
+}
+
+.commentUser{
+    margin-top: 1rem;
+    margin-left: 15px;
+    padding-left: 15px;
+    background-color: #03dddc;
+    width: 10%;
+}
+
+.detailfields{
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 50px;
+    margin-bottom: 50px;"
+}
+
+hr.style-seven {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: -webkit-linear-gradient(left, #ccc, #333, #ccc);
+    background-image: -moz-linear-gradient(left, #ccc, #333, #ccc);
+    background-image: -ms-linear-gradient(left, #ccc, #333, #ccc);
+    background-image: -o-linear-gradient(left, #ccc, #333, #ccc);
+    }
 
 .comments, .item{
     padding: 0px 15px;

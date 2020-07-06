@@ -1,197 +1,239 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-{% if item.status == True %}
+
+{% if item.status == True %}                                                                       <!-- Open Lisitng Block Start -->
+    
     <div class="item">
         <h1 id="item">{{item.item}}</h1>
-        <h5 id="desc">Description - {{item.description}}</h4>
-
+        <h5 id="desc">{{item.description}}</h4>
         {% if item.category != 'None' %}
             <div id="catg">Category - {{item.category}}</div>
         {% endif %}
     </div>
-    <div class="row" style="padding-left: 15px; padding-right: 15px;">
     
-        {% if user.is_authenticated %}
+    <div class="row detailfields">
+    
+        {% if user.is_authenticated %}                                                              <!-- Authenticated User Block Start -->
             {% if messages %}
-                <ul class="messages">
+                <ul class="messages">                                                       
                 {% for message in messages %}
                     <h5>{{ message }}</h5>
                 {% endfor %}
                 </ul>
             {% endif %}
 
-            <div class="item col-6" style="padding: 50px;">
+            <div class="item col-6" >
                 {% if request.user == item.user %}
-                {% if bids %}
-
-                {% for b in bids %}
-                
-                {% if b.amount == item.startbid %}
-                    <div id="bid">Highest bid: {{item.startbid}}</div>
-                {% endif %}
-                {% endfor %}
-                
-                {% else %}
-                    <div id="bid">Starting Bid: {{item.startbid}}</div>
-                {% endif %}
-                <form style="margin-top: 20px;" action="{% url 'close' item.id %}" method="POST">
-                    {% csrf_token %}
-                    <button  class="btn btn-primary" style="margin-top: 10px;">Close Entry</button>
-                </form>
-            {% endif %}
-
-            {% if request.user != item.user%}
-
-            {% if bids %}
-            {% for b in bids %}
-                {% if b.amount == item.startbid %}
-                    <div id="bid">Highest bid: {{item.startbid}}</div>
-                {% endif %}
-            {% endfor %}
-        
-            {% else %}
-                <div id="bid">Starting Bid: {{item.startbid}}</div>
-            {% endif %}
-                <form style="margin-top: 20px;" action="{% url 'placebid' item.id %}" method="POST">
-                    <div class="form-group">
-                    {% csrf_token %}
-                    <input class="form-control" style="width: 25%;" name="bid" type="number" step="1">
-                    <button type="submit" class="btn btn-primary" style="margin-top: 10px;" > Place Bid</button><br><br><br>
-                    </div>
-                </form>
-            
-    
-                {% if wishlisted %}
-                    <form style="margin-top: 20px;" action="{% url 'unwishlist' item.id %}" method="POST">
+                    {% if bids %}
+                        {% for b in bids %}
+                            {% if b.amount == item.startbid %}
+                                <div id="bid">Highest bid: <f><₹{{item.startbid}}</f></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div id="bid">Starting Bid: <f>₹{{item.startbid}}</f></div>
+                    {% endif %}
+                    <form style="margin-top: 20px;" action="{% url 'close' item.id %}" method="POST">
                         {% csrf_token %}
-                        <button class="btn btn-primary" style="background-color: crimson; color: white; border-color: black ;"> &#9734; Watching</button>
+                        <button  class="btn btn-primary" style="margin-top: 10px;">Close Entry</button>
                     </form>
-                {% else %}
-                    <form style="margin-top: 20px;" action="{% url 'wishlist' item.id %}" method="POST">
+                {% endif %}
+
+                {% if request.user != item.user%}
+                    {% if bids %}
+                        {% for b in bids %}
+                            {% if b.amount == item.startbid %}
+                                <div id="bid">Highest bid: <f>₹{{item.startbid}}</f></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div id="bid">Starting Bid: <f>₹{{item.startbid}}</f></div>
+                    {% endif %}
+                    
+                    <form style="margin-top: 20px;" action="{% url 'placebid' item.id %}" method="POST">
                         <div class="form-group">
                             {% csrf_token %}
-                            <button class="btn btn-primary">Watch</button>
+                            <input class="form-control" style="width: 25%;" name="bid" type="number" step="1">
+                            <button type="submit" class="btn btn-primary" style="margin-top: 10px;" > Place Bid</button><br><br><br>
                         </div>
                     </form>
+                    
+                    {% if wishlisted %}
+                        <form style="margin-top: 20px;" action="{% url 'unwishlist' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-primary watching"> &#9734; Watching</button>
+                        </form>
+                    {% else %}
+                        <form style="margin-top: 20px;" action="{% url 'wishlist' item.id %}" method="POST">
+                            <div class="form-group">
+                                {% csrf_token %}
+                                <button class="btn btn-primary">Watch</button>
+                            </div>
+                        </form>
+                    {% endif %}
                 {% endif %}
-                
-            {% endif %}
-        </div>
+            </div>
     
-        <div class="item col-6">   
-            {% if item.image_url %}
-                <img id="image" style="float:right; width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
-            {% endif %}
-        </div>
-    </div>
-    <h4 class="sub-head">Comments</h4>
-    
-        <div class="comments">
-            <form action="{% url 'comment' item.id %}" method="POST">
-                {% csrf_token %}
-                <div class="field form-group col-12" style="padding: 0;">
-                    <label for="{{ form.description.id_for_label }}">Write a comment</label>
-                    <textarea class="form-control" name="comment" cols="40" rows="10" maxlength="200" required="" id="id_comment"></textarea>
-                </div>
-                <input class="btn btn-primary" type="submit" value="Post" >
-            </form>
-        </div>
-        {% for c in comments%}
-        <div> {{c.name}} said: {{c.comment}} </div>
-        {% endfor %}
-    {% else %}
-    <div class="item">
-        {% if item.image_url %}
-            <img id="image" style="width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
-        {% endif %} 
+            <div class="item col-6">   
+                {% if item.image_url %}
+                    <img id="image" style="float:right; width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+                {% endif %}
+            </div>
         
-        {% if bids %}
-            {% for b in bids %}
-                {% if b.amount == item.startbid %}
-                    <div id="bid">Highest bid: {{item.startbid}}</div>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <div id="bid">Starting Bid: {{item.startbid}}</div>
-        {% endif %}
     </div>
-        <h4 class="sub-head">Comments</h4>
-        {% for c in comments%}
-            <div> {{c.name}} said: {{c.comment}} </div>
-        {% endfor %}
+            <h4 class="sub-head">Comments</h4>
+    
+            <div class="comments">
+                <form action="{% url 'comment' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="field form-group col-12" style="padding: 0;">
+                        <label for="{{ form.description.id_for_label }}">Write a comment</label>
+                        <textarea class="form-control" style="height: 100px;" name="comment" cols="40" rows="10" maxlength="200" required="" id="id_comment"></textarea>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Post" >
+                </form>
+            </div>
+            <hr class="style-seven" />
+            {% for c in comments%}
+                <div style="margin-bottom: 50px;">
+                    <p class="commentUser">
+                        {{c.name}}
+                    </p>
+                    <div style="padding-left: 30px;">
+                        {{c.comment}}
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        
+        {% else %}                                                                                  <!-- Anonymous User Block Start -->
+        
+            <div class="col-6">
+                {% if bids %}
+                    {% for b in bids %}
+                        {% if b.amount == item.startbid %}
+                            <div id="bid">Highest bid: <f>₹{{item.startbid}}</f></div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div id="bid">Starting Bid: <f>₹{{item.startbid}}</f></div>
+                {% endif %}
+            </div>
+            <div class="item col-6">
+                {% if item.image_url %}
+                    <img id="image" style="width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+                {% endif %} 
+            </div>
+    </div>
+            <hr class="style-seven" />
+            <h4 class="sub-head">Comments</h4>
+                {% for c in comments%}
+                    <div style="margin-bottom: 50px;">
+                        <p class="commentUser">
+                            {{c.name}}
+                        </p>
+                        <div style="padding-left: 30px;">
+                            {{c.comment}}
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
 
-    {% endif %}
+        {% endif %}                                                                                 <!-- User Block End -->
     
 
-{% else %}
+{% else %}                                                                                          <!-- Closed Lisitng Block Start -->
+
     <div class="item">
         <h1 id="item">{{item.item}}</h1>
-        <h5 id="desc">Description - {{item.description}}</h4>
-
+        <h5 id="desc">{{item.description}}</h4>
         {% if item.category != 'None' %}
             <div id="catg">Category - {{item.category}}</div>
         {% endif %}
     </div>
     
-    {% if user.is_authenticated  %}
+    <div class="row detailfields" >
     
-    <div class="item">
-        <h1 id="item">{{item.item}}</h1>
-        <h4 id="desc">{{item.description}}</h4>
-        {% if item.image_url %}
-            <img id="image" style="width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
-        {% endif %} 
-        {% if item.category != 'None' %}
-            <div id="catg"> Category - {{item.category}}</div>
-        {% endif %}
-        {% if bids %}
-            {% for b in bids %}
+    {% if user.is_authenticated  %}                                                                 <!-- Authenticated User Block Start -->
+    
+
+        <div class="col-6">
+            {% if bids %}
+                {% for b in bids %}
                 {% if b.amount == item.startbid %}
-                    <div id="bid">Closing Bid by {{b.placer}}: {{item.startbid}}</div>
+                    <div id="bid">Closing Bid by {{b.placer}}: <f>₹{{item.startbid}}</f></div>
                 {% endif %}
-            {% endfor %}
-        {% else %}
-            <div id="bid">Not Sold. Original Bid: {{item.startbid}}</div>
-        {% endif %}
+                {% endfor %}
+            {% else %}
+                <div id="bid">Not Sold. Original Bid: <f>₹{{item.startbid}}</f></div>
+            {% endif %}
+        </div>
+
+        <div class="item col-6">
+            {% if item.image_url %}
+                <img id="image" style="width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+            {% endif %} 
+        </div>
     </div>
-    <h4 class="sub-head">Comments</h4>
-    
+    <hr class="style-seven" />
+        <h4 class="sub-head">Comments</h4>
         <div class="comments">
             <form action="{% url 'comment' item.id %}" method="POST">
                 {% csrf_token %}
                 <div class="field form-group col-12" style="padding: 0;">
                     <label for="{{ form.description.id_for_label }}">Write a comment</label>
-                    <textarea class="form-control" name="comment" cols="40" rows="10" maxlength="200" required="" id="id_comment"></textarea>
+                    <textarea class=" form-control" style="height: 100px;" name="comment" cols="40" rows="10" maxlength="200" required="" id="id_comment"></textarea>
                 </div>
                 <input class="btn btn-primary" type="submit" value="Post" >
             </form>
         </div>
+        
         {% for c in comments%}
-        <div> {{c.name}} said: {{c.comment}} </div>
+            <div style="margin-bottom: 50px;">
+                <p class="commentUser">
+                    {{c.name}}
+                </p>
+                <div style="padding-left: 30px;">
+                    {{c.comment}}
+                </div>
+            </div>
+            <hr>
         {% endfor %}
-        {% else %}
-
-        <div class="item">
-            {% if item.image_url %}
-                <img id="image" style="width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
-            {% endif %} 
-            
+    
+    {% else %}                                                                                      <!-- Anonymous User Block Start -->
+        <div class="col-6">
             {% if bids %}
                 {% for b in bids %}
                     {% if b.amount == item.startbid %}
-                        <div id="bid">Closing Bid by {{b.placer}}: {{item.startbid}}</div>
+                        <div id="bid">Closing Bid by {{b.placer}}: <f>₹{{item.startbid}}</f></div>
                     {% endif %}
                 {% endfor %}
             {% else %}
-                <div id="bid">Not Sold. Original Bid: {{item.startbid}}</div>
+                <div id="bid">Not Sold. Original Bid: <f>₹{{item.startbid}}</f></div>
             {% endif %}
         </div>
-            <h4 class="sub-head">Comments</h4>
+        <div class="item col-6">
+            {% if item.image_url %}
+                <img id="image" style="width: 700px; height: 400px;" src="{{item.image_url}}" alt="Item Image Here">
+            {% endif %} 
+        </div>
+    </div>
+        <hr class="style-seven" />
+        <h4 class="sub-head">Comments</h4>
             {% for c in comments%}
-                <div> {{c.name}} said: {{c.comment}} </div>
+                <div style="margin-bottom: 50px;">
+                    <p class="commentUser">
+                        {{c.name}}
+                    </p>
+                    <div style="padding-left: 30px;">
+                        {{c.comment}}
+                    </div>
+                </div>
+                <hr>
             {% endfor %}
-        {% endif%}
+    {% endif%}                                                                                          <!-- User Block End -->
 
 {% endif %}
+
 {% endblock %}
