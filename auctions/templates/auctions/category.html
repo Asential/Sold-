@@ -4,6 +4,8 @@
     <h2>Category: {{category}}</h2>
     {% for i in items %}
     {% if i.status == True and i.category == category %}
+        {% with f='True' %}
+        {% endwith %}
          <div class="container row">
         <div class="background-img">
           <div class="box">
@@ -36,4 +38,7 @@
       </div>
     {% endif %}
     {% endfor %}
+    {% if f != 'True' %}
+    <h4 style="margin-top: 40px;">No Active Listings in This Category!</h4>
+    {% endif %}
 {% endblock %}

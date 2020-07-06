@@ -18,6 +18,19 @@ body {
     padding: 20px;
 }
 
+.catlinks{
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: ease 0.5s;
+}
+
+.catlinks:hover{
+    color: blanchedalmond;
+    transition: ease 0.5s;
+    background-color: #03dddc;
+}
+
 .btn-primary{
     color: black;
     background-color: #fdf200;

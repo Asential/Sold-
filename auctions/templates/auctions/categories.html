@@ -3,14 +3,14 @@
 {% block body %}
     <h2 class="sub-head">Categories</h2>
         <div class="col-12">
-            <a id="link" href="{% url 'category' 'Toys' %}">Toys</a>
+            <a id="link" class="catlinks" href="{% url 'category' 'Toys' %}">Toys</a>
             
-            <a id="link" href="{% url 'category' 'Fashion' %}">Fashion</a>
+            <a id="link" class="catlinks" href="{% url 'category' 'Fashion' %}">Fashion</a>
             
-            <a id="link" href="{% url 'category' 'Home' %}">Home</a>
+            <a id="link" class="catlinks" href="{% url 'category' 'Home' %}">Home</a>
             
-            <a id="link" href="{% url 'category' 'Electronics' %}">Electronics</a>
+            <a id="link" class="catlinks" href="{% url 'category' 'Electronics' %}">Electronics</a>
 
-            <a id="link" href="{% url 'category' 'None' %}">Other</a>
+            <a id="link" class="catlinks" href="{% url 'category' 'None' %}">Other</a>
     </div>
 {% endblock %}
