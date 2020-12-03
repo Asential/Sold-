@@ -3,10 +3,8 @@
 {% block body %}
     <h2>Category: {{category}}</h2>
     {% for i in items %}
-    {% if i.status == True and i.category == category %}
-        {% with f='True' %}
-        {% endwith %}
-         <div class="container row">
+    <!-- {% if i.status == True and i.category == category %} -->
+       <div class="container row">
         <div class="background-img">
           <div class="box">
             <div class="col-12 listing content">
@@ -36,9 +34,9 @@
           </div>
         </div>
       </div>
-    {% endif %}
+    <!-- {% endif %} -->
+    {% empty %}
+        <h4 style="margin-top: 40px;">No Active Listings in This Category!</h4>
     {% endfor %}
-    {% if f != 'True' %}
-    <h4 style="margin-top: 40px;">No Active Listings in This Category!</h4>
-    {% endif %}
+
 {% endblock %}

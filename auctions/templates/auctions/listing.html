@@ -15,20 +15,21 @@
     <div class="row detailfields">
     
         {% if user.is_authenticated %}                                                              <!-- Authenticated User Block Start -->
+            <div class="row col-12" >
             {% if messages %}
-                <ul class="messages">                                                       
+                <div class="messages" style="color: brown; padding-left: 15px;">                                                       
                 {% for message in messages %}
                     <h5>{{ message }}</h5>
                 {% endfor %}
-                </ul>
+                </div>
             {% endif %}
-
+            </div>
             <div class="item col-6" >
                 {% if request.user == item.user %}
                     {% if bids %}
                         {% for b in bids %}
                             {% if b.amount == item.startbid %}
-                                <div id="bid">Highest bid: <f><₹{{item.startbid}}</f></div>
+                                <div id="bid">Highest bid: <f>₹{{item.startbid}}</f></div>
                             {% endif %}
                         {% endfor %}
                     {% else %}
@@ -36,8 +37,22 @@
                     {% endif %}
                     <form style="margin-top: 20px;" action="{% url 'close' item.id %}" method="POST">
                         {% csrf_token %}
-                        <button  class="btn btn-primary" style="margin-top: 10px;">Close Entry</button>
+                        <button  class="btn btn-primary" style="margin-top: 10px;">Close Entry</button><br><br><br>
                     </form>
+                    {% if wishlisted %}
+                        <form style="margin-top: 20px;" action="{% url 'unwishlist' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-primary watching"> &#9734; Watching</button>
+                        </form>
+                    {% else %}
+                        <form style="margin-top: 20px;" action="{% url 'wishlist' item.id %}" method="POST">
+                            <div class="form-group">
+                                {% csrf_token %}
+                                <button class="btn btn-primary">Watch</button>
+                            </div>
+                        </form>
+                    {% endif %}
+
                 {% endif %}
 
                 {% if request.user != item.user%}
@@ -54,7 +69,7 @@
                     <form style="margin-top: 20px;" action="{% url 'placebid' item.id %}" method="POST">
                         <div class="form-group">
                             {% csrf_token %}
-                            <input class="form-control" style="width: 25%;" name="bid" type="number" step="1">
+                            <input required class="form-control" style="width: 25%;" name="bid" type="number" step="1">
                             <button type="submit" class="btn btn-primary" style="margin-top: 10px;" > Place Bid</button><br><br><br>
                         </div>
                     </form>

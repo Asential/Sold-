@@ -6,15 +6,15 @@
         {% csrf_token %}
         <div class="col-12 form-group field">
             <br>
-            <input placeholder="Title" class="form-control" style="width: 25%;" type="text" name="item" maxlength="64" required="" id="id_item">
+            <input placeholder="Title *" class="form-control" style="width: 25%;" type="text" name="item" maxlength="64" required="" id="id_item">
         </div>
         <div class="col-12 form-group field">
             <br>
-            <input placeholder="Starting Bid" class="form-control" style="width: 10%;" type="number" name="startbid" required="" id="id_startbid">
+            <input placeholder="(₹) Starting Bid *" class="form-control" style="width: 13%;" type="number" name="startbid" required="" id="id_startbid">
         </div>
         <div class="col-12 form-group field">
             <br>
-            <textarea placeholder="Describe your item here..." class="form-control" style="width: 50%;" name="description" cols="40" rows="10" maxlength="600" required="" id="id_description"></textarea>
+            <textarea placeholder="Describe your item here... *" class="form-control" style="width: 50%;" name="description" cols="40" rows="10" maxlength="600" required="" id="id_description"></textarea>
         </div>
         <div class="col-12 form-group field">
             <br>

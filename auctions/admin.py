@@ -3,7 +3,7 @@ from auctions.models import User, Comment, Bid, Listing, WishList
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
-    filter_horizontal = ("liked",)
+    filter_horizontal = ("item",)
 
 admin.site.register(User)
 admin.site.register(WishList, UserAdmin)

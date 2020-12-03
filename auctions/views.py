@@ -8,6 +8,7 @@ from django.forms import ModelForm
 from .models import User, Listing, Bid, Comment, WishList
 from django.contrib import messages
 
+
 class ListingForm(ModelForm):  
     class Meta:  
         model = Listing  
@@ -67,8 +68,13 @@ def categories(request):
 
 def category(request, category):
     items = Listing.objects.all()
+    active = []
+    for i in items:
+        if i.category == category and i.status == True:
+            active.append(i)
+    print(active)
     return render(request, "auctions/category.html", {
-        "items": items,
+        "items": active,
         "category": category
     })
 
@@ -173,6 +179,8 @@ def create(request):
         "form": form
     })
 
+#----------------------------------------------------------------
+
 @login_required
 def save(request):
     if request.method == "POST":
@@ -190,6 +198,8 @@ def save(request):
         else:
             print("Error")
             return HttpResponseRedirect(reverse("index"))
+
+#----------------------------------------------------------------
 
 @login_required
 def wishlist(request, id):
@@ -211,6 +221,8 @@ def wishlist(request, id):
         print("Error")
         return HttpResponseRedirect(reverse("listing",args=(id,)))
 
+#----------------------------------------------------------------
+
 @login_required
 def unwishlist(request, id):
     if request.method == "POST":
@@ -227,6 +239,8 @@ def unwishlist(request, id):
         print("Error")
         return HttpResponseRedirect(reverse("listing",args=(id,)))
 
+#----------------------------------------------------------------
+
 @login_required
 def watchlist(request):
 
@@ -235,6 +249,8 @@ def watchlist(request):
     return render(request, "auctions/watchlist.html", {
         "items": watchlist_items
     })
+
+#----------------------------------------------------------------
 
 @login_required
 def placebid(request, id):
@@ -247,26 +263,28 @@ def placebid(request, id):
             totalbids = Bid.objects.filter(item=item)
             for bid in totalbids:
                 if currentbid <= bid.amount:
-                    print("Bid Smaller than other bids!")
+                    # print("Bid Smaller than other bids!")
                     messages.add_message(request, messages.ERROR, 'Bid Smaller than other bids!')
                     return HttpResponseRedirect(reverse("listing",args=(id,)))
 
-            print("New Bid Placed!")
+            # print("New Bid Placed!")
             newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
             item.startbid = currentbid
             item.save()
             return HttpResponseRedirect(reverse("listing",args=(id,)))
 
         else:
-            print("First Bid Placed!")
+            # print("First Bid Placed!")
             newbid = Bid.objects.create(placer = request.user, item=item, amount = currentbid)
             item.startbid = currentbid
             item.save()
             return HttpResponseRedirect(reverse("listing",args=(id,)))
 
-    print("Bid smaller than starting bid!")
+    # print("Bid smaller than starting bid!")
     messages.add_message(request, messages.ERROR, 'Bid smaller than required bid to replace!')
     return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+#----------------------------------------------------------------
 
 @login_required
 def close(request, id):
@@ -278,6 +296,9 @@ def close(request, id):
     else:
         print("Error")
         return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+#----------------------------------------------------------------
+
 
 @login_required
 def comment(request, id):
@@ -298,4 +319,6 @@ def comment(request, id):
     else:
         print("Error")
         return HttpResponseRedirect(reverse("listing",args=(id,)))
+
+#----------------------------------------------------------------
 
